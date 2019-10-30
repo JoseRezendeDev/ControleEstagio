@@ -1,33 +1,30 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 import modelo.Usuario;
-import util.ConnectionLojaFactory;
 
 public class UsuarioDAO {
-
-	public boolean autentica(Usuario usuario) {
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			conn = ConnectionLojaFactory.getConnection();
-			String sql = "select * from usuario where login = ? and senha = ?";
-			ps = conn.prepareStatement(sql);
-			ps.setString(1, usuario.getLogin());
-			ps.setString(2, usuario.getSenha());
-			rs = ps.executeQuery();
-			if(rs.next()) {
-				return true;
-			}
-			return false;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	private EntityManager manager;
+	
+	public UsuarioDAO(EntityManager manager) {
+		this.manager = manager;
+	}
+	
+	public void salvar(Usuario usuario) {
+		manager.persist(usuario);
 	}
 
-
+	public boolean autentica(Usuario usuario) {
+		Query query = manager.createQuery("select u from Usuario u where u.login = ?1 and u.senha = ?2");
+		query.setParameter(1, usuario.getLogin()).setParameter(2, usuario.getSenha());
+		try {
+			query.getSingleResult();
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
 }
