@@ -23,7 +23,7 @@ public class Estagio extends VagaEstagio {
 	private List<Relatorio> relatorios;
 	
 	@OneToOne(fetch = FetchType.EAGER,
-            mappedBy = "estafio")
+            mappedBy = "estagio")
 	private Aluno aluno;
 		
 	public ZonedDateTime getDataInicio() {
