@@ -9,7 +9,7 @@ public class ConnectionLojaFactory {
 		try {
 			Class.forName("org.hsqldb.jdbcDriver");
 			return DriverManager.getConnection(
-					"jdbc:hsqldb:hsql://localhost/controleEstagio", "sa", "");
+					"jdbc:hsqldb:hsql://localhost/estagiodb", "sa", "");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
